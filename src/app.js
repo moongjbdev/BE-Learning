@@ -6,12 +6,14 @@ const compression = require('compression')
 
 
 // Middleware 
-app.use(morgan('combined'))
-app.use(helmet())
-app.use(compression())
+app.use(morgan('combined')) // notification when api is called
+app.use(helmet()) //hide tech
+app.use(compression()) //use less bandwidth
     
 // Database
-
+require('./databases/init.mongodb')
+const {checkOverload} = require('./helpers/check.connect')
+checkOverload()
 //Routes
 app.get('/', (req, res) => {
    return res.status(404).json({
