@@ -1,3 +1,4 @@
+require('dotenv').config()
 const express = require('express');
 const app = express();
 const morgan = require('morgan');
@@ -9,7 +10,7 @@ const compression = require('compression')
 app.use(morgan('combined')) // notification when api is called
 app.use(helmet()) //hide tech
 app.use(compression()) //use less bandwidth
-    
+
 // Database
 require('./databases/init.mongodb')
 const {checkOverload} = require('./helpers/check.connect')
