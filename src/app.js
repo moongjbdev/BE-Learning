@@ -10,17 +10,16 @@ const compression = require('compression')
 app.use(morgan('combined')) // notification when api is called
 app.use(helmet()) //hide tech
 app.use(compression()) //use less bandwidth
+app.use(express.json()) // parse json request
+app.use(express.urlencoded({ extended: true })) // parse urlencoded request
 
 // Database
 require('./databases/init.mongodb')
 const {checkOverload} = require('./helpers/check.connect')
-checkOverload()
+// checkOverload()
 //Routes
-app.get('/', (req, res) => {
-   return res.status(404).json({
-    message: "Hello, world!"
-   })
-})
+app.use('', require('./routes/index'))
+
 // Handle Error
 
 module.exports = app;
