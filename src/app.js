@@ -15,11 +15,24 @@ app.use(express.urlencoded({ extended: true })) // parse urlencoded request
 
 // Database
 require('./databases/init.mongodb')
-const {checkOverload} = require('./helpers/check.connect')
-// checkOverload()
+
+
 //Routes
 app.use('', require('./routes/index'))
 
-// Handle Error
+//             Handle Error
+app.use((req, res, next) => {
+    const error = new Error('Not Found')
+    error.status = 404
+    next(error)
+})
 
+app.use((error, req, res, next) => {
+    const statusCode = error.status || 500
+    return res.status(statusCode).json({
+        status: 'error <3 MoongJB ',
+        code: statusCode,
+        message: error.message || 'Internal Server Error',
+    })
+})
 module.exports = app;
