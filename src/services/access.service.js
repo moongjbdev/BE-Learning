@@ -79,20 +79,25 @@ class AccessService {
 
                 //Create token pair
                 const tokens = await createTokenPair({userId: newShop._id, email}, publicKey, privateKey)
+                // return {
+                //     code: "201 <3 MoongJB check ::",
+                //     metadata: {
+                //         shop: getInforData({fields: ['_id', 'name', 'email'], object: newShop}),
+                //         tokens
+                //     },
+                // }
+
                 return {
-                    code: "201",
-                    metadata: {
                         shop: getInforData({fields: ['_id', 'name', 'email'], object: newShop}),
                         tokens
-                    },
                 }
 
             }
 
-            return {
-                code: "200",
-                metadata: null
-            }
+            // return {
+            //     code: "200",
+            //     metadata: null
+            // }
         // } catch (error) {
             // return {
             //     code: "errorxxxx",
