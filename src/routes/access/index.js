@@ -10,6 +10,10 @@ const { asyncHandler } = require('../../auth/checkAuth');
 // Sign Up
 router.post('/shop/signup',asyncHandler(AccessController.signUp));
 
+// Sign In
+router.post('/shop/signin',asyncHandler(AccessController.signIn));
+
+
 
 
 
