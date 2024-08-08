@@ -34,7 +34,7 @@ const {Types} = require('mongoose')
         return await keytokenModel.findOne({
             user:new Types.ObjectId(userId),
             
-        }).lean()
+        })
         
     }
 
