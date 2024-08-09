@@ -1,29 +1,20 @@
-// 'use strict';
+'use strict';
 
-// const express = require('express');
-// const router = express.Router();
-// const ProductController = require('../../controllers/product.controller');
-// const { asyncHandler } = require('../../auth/checkAuth');
-// const { authentication } = require('../../auth/authUtils');
-
-
-
-// // Sign Up
-// router.post('/shop/signup',asyncHandler(AccessController.signUp));
-
-// // Sign In
-// router.post('/shop/signin',asyncHandler(AccessController.signIn));
+const express = require('express');
+const router = express.Router();
+const ProductController = require('../../controllers/product.controller');
+const { asyncHandler } = require('../../auth/checkAuth');
+const { authenticationV2 } = require('../../auth/authUtils');
 
 
-// // Authentication
-// router.use(authentication)
-// // Logout
-// router.post('/shop/logout',asyncHandler(AccessController.logout));
-// router.post('/shop/handlerRefreshToken',asyncHandler(AccessController.handlerRefreshToken));
+// Authentication
+router.use(authenticationV2)
+// Logout
+router.post('',asyncHandler(ProductController.createProduct));
 
 
 
 
 
 
-// module.exports = router
+module.exports = router

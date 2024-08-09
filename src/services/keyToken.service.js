@@ -15,13 +15,13 @@ const {Types} = require('mongoose')
             // return tokens ? tokens : null
 
             //level up
+            //Sigup chưa cần tạo refreshToken, khi nào signin thì tạo rtoken sau
             const fillerToken = {user: userId}
             const updateToken = {
                 publicKey, privateKey, refreshTokensUsed: [], refreshToken
             }
             const optionsToken = {upsert: true, new: true}
             const tokens = await keytokenModel.findOneAndUpdate(fillerToken, updateToken, optionsToken)
-
 
             return tokens ? tokens.publicKey : null
         } catch (error) {

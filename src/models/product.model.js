@@ -27,7 +27,7 @@ var productSchema = new Schema({
     product_type: {
         type: String,
         required: true,
-        enum: ['electronics', 'clothing', 'furniture']
+        enum: ['Electronic', 'Clothing', 'Furniture']
     },
     product_shop: {type: Schema.Types.ObjectId, ref: 'Shop'},
     product_attributes: {

@@ -5,7 +5,8 @@ const ProductService = require("../services/product.service");
 
 class ProductController {
 
-    createProduct = async (req, res, next) => {
+        createProduct = async (req, res, next) => {
+            
         new SuccessResponse({
             message: 'Create new Product successfully!',
             metadata: await ProductService.createProduct(

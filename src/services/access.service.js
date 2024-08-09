@@ -140,10 +140,6 @@ class AccessService {
             shop: getInforData({ fields: ['_id', 'name', 'email'], object: foundShop }),
             tokens
         }
-
-
-
-
     }
 
     static signUp = async ({ name, email, password }) => {
