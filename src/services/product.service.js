@@ -41,8 +41,8 @@ class Product {
     }
 
     // create new product
-    async createProduct() {
-        return await product.create(this)
+    async createProduct(product_id) {
+        return await product.create({...this, _id: product_id})
     }
 }
 
@@ -52,10 +52,13 @@ class Clothing extends Product {
     
     // override createProduct method to add clothing specific attributes
     async createProduct() {
-        const newClothing = await clothing.create(this.product_attributes)
+        const newClothing = await clothing.create({
+            ...this.product_attributes,
+            product_shop: this.product_shop,
+        })
         if(!newClothing) throw new BadRequestError('Create new Clothing failed')
 
-        const newProduct = await super.createProduct()
+        const newProduct = await super.createProduct(newClothing._id)
         if(!newProduct) throw new BadRequestError('Create new Product failed')
 
         return newProduct
@@ -69,10 +72,13 @@ class Electronic extends Product {
     
     // override createProduct method to add electronic specific attributes
     async createProduct() {
-        const newElectronic = await electronic.create(this.product_attributes)
+        const newElectronic = await electronic.create({
+            ...this.product_attributes,
+            product_shop: this.product_shop,
+        })
         if(!newElectronic) throw new BadRequestError('Create new Electronics failed')
 
-        const newProduct = await super.createProduct()
+        const newProduct = await super.createProduct(newElectronic._id)
         if(!newProduct) throw new BadRequestError('Create new Product failed')
 
         return newProduct

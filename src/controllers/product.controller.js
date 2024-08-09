@@ -6,12 +6,17 @@ const ProductService = require("../services/product.service");
 class ProductController {
 
         createProduct = async (req, res, next) => {
+            console.log("check =========", req.user)
             
         new SuccessResponse({
             message: 'Create new Product successfully!',
             metadata: await ProductService.createProduct(
                 req.body.product_type,
-                req.body
+                {
+                ...req.body,
+                product_shop: req.user.userId
+
+                }
             )
         }).send(res);
     }
