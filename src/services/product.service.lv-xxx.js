@@ -7,6 +7,7 @@ const {
     electronic,
     furniture,
 } = require("../models/product.model");
+const { insertInventory } = require("../models/repositories/inventory.repo");
 const { findAllDraftForShop, publishProductByShop, findAllPublishForShop, unPublishProductByShop, searchProductsByUser, findAllProducts, findProduct, updateProductById } = require("../models/repositories/product.repo");
 const { removeUndefindObject, updateNestedObject } = require("../utils");
 
@@ -114,8 +115,9 @@ class Product {
         const newProduct = await product.create({ ...this, _id: product_id });
         if (newProduct) {
             //add product_stock
-            await ins
+            await insertInventory({ productId: newProduct._id, shopId: this.product_shop, stock: this.product_quantity })
         }
+        return newProduct;
     }
 
     // update product
@@ -143,20 +145,16 @@ class Clothing extends Product {
 
     async updateProduct(productId) {
         /**
-         * 
-         */
+        * 
+        */
         //remove attributes has null underfined
         //check update o dau?
-        console.log('check this []', this)
         const objectParams = removeUndefindObject(this)
-        console.log('check before this []', objectParams)
         if (objectParams.product_attributes) {
             //update child
-            await updateProductById({ productId, bodyUpdate: objectParams, model: clothing })
-
+            await updateProductById({ productId, bodyUpdate: updateNestedObject(objectParams.product_attributes), model: clothing })
         }
-
-        const updateProduct = await super.updateProduct(productId, objectParams)
+        const updateProduct = await super.updateProduct(productId, updateNestedObject(objectParams))
         return updateProduct
     }
 }
@@ -209,6 +207,21 @@ class Furniture extends Product {
         if (!newProduct) throw new BadRequestError("Create new Product failed");
 
         return newProduct;
+    }
+
+    async updateProduct(productId) {
+        /**
+         * 
+         */
+        //remove attributes has null underfined
+        //check update o dau?
+        const objectParams = removeUndefindObject(this)
+        if (objectParams.product_attributes) {
+            //update child
+            await updateProductById({ productId, bodyUpdate: updateNestedObject(objectParams.product_attributes), model: furniture })
+        }
+        const updateProduct = await super.updateProduct(productId, updateNestedObject(objectParams))
+        return updateProduct
     }
 }
 
