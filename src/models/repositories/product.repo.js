@@ -1,7 +1,7 @@
 'use strict';
 
 const { product, electronic, clothing, furniture } = require('../../models/product.model');
-const {Types} = require('mongoose');
+const {Types, Schema} = require('mongoose');
 const { getSelectData, getUnSelectData } = require('../../utils');
 
 // =================================================================
@@ -112,6 +112,12 @@ const unPublishProductByShop = async ({product_shop, product_id}) => {
     return 1;
 }
 
+const updateProductById = async ({productId, bodyUpdate, model, isNew = true}) => {
+    return await model.findOneAndUpdate(
+        { _id: productId }, // Tìm sản phẩm dựa trên _id
+        bodyUpdate,         // Dữ liệu cập nhật
+        { new: isNew } );
+}
 
 
 module.exports = {
@@ -121,5 +127,6 @@ module.exports = {
     unPublishProductByShop,
     searchProductsByUser,
     findAllProducts,
-    findProduct
+    findProduct,
+    updateProductById
 };
