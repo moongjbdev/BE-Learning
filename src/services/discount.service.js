@@ -1,7 +1,7 @@
 'use strict';
 const { BadRequestError, NotFoundError } = require('../core/error.response');
 const { discount } = require('../models/discount.model');
-const { findAllDiscountCodesUnselected } = require('../models/repositories/discount.repo');
+const { findAllDiscountCodesUnselected, checkDiscountExists } = require('../models/repositories/discount.repo');
 const { findAllProducts } = require('../models/repositories/product.repo');
 const { convertToOnjectIdMongodb } = require('../utils');
 /**
@@ -143,4 +143,60 @@ class DiscountService {
 
         return discounts;
     }
+
+    /*
+        Apply Discount Code
+        products = [
+            {
+                productId,
+                shopId,
+                quantity,
+                name,
+                price
+            },
+            {
+                productId,
+                shopId,
+                quantity,
+                name,
+                price
+            }
+        ]
+    */
+
+    static async getDiscountAmount({ codeId, shopId, userId, products }) {
+        const foundDiscountCode = await checkDiscountExists(discount, {
+            discount_code: codeId,
+            discount_shopId: convertToOnjectIdMongodb(shopId),
+        })
+        if (!foundDiscountCode) throw new NotFoundError(`Discount code not found`);
+
+        const { discount_is_active,
+            discount_max_uses,
+            discount_start_date,
+            discount_min_order_value
+        } = foundDiscountCode
+
+        if (!discount_is_active) {
+            throw new NotFoundError(`Discount expried! `)
+        }
+
+        if (!discount_max_uses) {
+            throw new NotFoundError(`All discount uses has been used!`)
+        }
+        if (new Date() < new Date(discount_start_date) || new Date() > new Date(discount_end_date)) {
+            throw new NotFoundError(`Discount code has expired!`)
+        }
+
+        // check xem co set gia tri toi thieu hay khong?
+
+        let totalOrder = 0
+        if (discount_min_order_value > 0) {
+            //get total
+            totalOrder = products.reduce((acc, product) => {
+
+            }, 0)
+        }
+    }
+
 }
