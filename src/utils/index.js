@@ -67,7 +67,7 @@ const updateNestedObject = (obj) => {
 }
 
 const convertToOnjectIdMongodb = (id) => {
-    return Types.ObjectId(id)
+    return new Types.ObjectId(id)
 }
 
 module.exports = {
