@@ -80,7 +80,10 @@ class ProductFactory {
     }
 
     static async findAllProducts({ limit = 50, sort = 'ctime', page = 1, filter = { isPublished: true } }) {
-        return await findAllProducts({ limit, sort, page, filter, select: ['product_name', 'product_price', 'product_thumb'] })
+        return await findAllProducts({
+            limit, sort, page, filter,
+            select: ['product_name', 'product_price', 'product_thumb', 'product_shop']
+        })
     }
     static async findProduct({ product_id }) {
         return await findProduct({ product_id, unSelect: ['__v'] })
