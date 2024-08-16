@@ -163,14 +163,18 @@ class DiscountService {
         ]
     */
     static async getDiscountAmount({ codeId, shopId, userId, products }) {
-        const foundDiscountCode = await checkDiscountExists(discount, {
-            discount_code: codeId,
-            discount_shop_id: convertToOnjectIdMongodb(shopId),
+        const foundDiscountCode = await checkDiscountExists({
+            model: discount,
+            filter: {
+                discount_code: codeId,
+                discount_shop_id: convertToOnjectIdMongodb(shopId)
+            }
         })
 
         if (!foundDiscountCode) throw new NotFoundError(`Discount code not found`);
 
-        const { discount_is_active,
+        const {
+            discount_is_active,
             discount_max_uses,
             discount_start_date,
             discount_min_order_value,
@@ -181,8 +185,7 @@ class DiscountService {
             discount_value
         } = foundDiscountCode
 
-
-        if (discount_is_active === false) {
+        if (!discount_is_active) {
             throw new NotFoundError(`Discount expried! `)
         }
 
@@ -192,16 +195,11 @@ class DiscountService {
         if (new Date() < new Date(discount_start_date) || new Date() > new Date(discount_end_date)) {
             throw new NotFoundError(`Discount code has expired!`)
         }
-
-        console.log("check discount", foundDiscountCode)
-
         // check xem co set gia tri toi thieu hay khong?
         let totalOrder = 0
         if (discount_min_order_value > 0) {
-            console.log("come here")
             //get total
             totalOrder = products.reduce((acc, product) => {
-                console.log("chack acc ", acc)
                 return acc + (product.quantity * product.price)
             }, 0)
 
@@ -209,7 +207,6 @@ class DiscountService {
                 throw new BadRequestError(`Discount requires a minium order value of ${discount_min_order_value}`)
             }
         }
-        console.log("check total order", totalOrder)
 
         // if (discount_max_uses_per_user > 0) {
         //     const userUserDiscount = discount_users_used.find(user => user.userId === userId)
