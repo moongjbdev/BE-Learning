@@ -52,7 +52,6 @@ class CartService {
     // END REPO CART //
 
     static async addToCart({ userId, product = {} }) {
-        console.log("check thu xem o service", userId)
 
         const userCart = await cart.findOne({ cart_userId: userId });
 

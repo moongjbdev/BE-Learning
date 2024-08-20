@@ -2,7 +2,7 @@ require('dotenv').config()
 const express = require('express');
 const app = express();
 const morgan = require('morgan');
-const {default: helmet} = require('helmet');
+const { default: helmet } = require('helmet');
 const compression = require('compression')
 
 
@@ -22,7 +22,7 @@ app.use('', require('./routes/index'))
 
 //             Handle Error
 app.use((req, res, next) => {
-    const error = new Error('Not Found')
+    const error = new Error('Not Found Your URL')
     error.status = 404
     next(error)
 })
